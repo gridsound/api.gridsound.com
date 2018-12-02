@@ -16,7 +16,7 @@ $res = $mysqli->query( "SELECT `id`, `email`, `firstname`, `lastname`, `username
 	FROM `users` WHERE `id`='$id'" );
 
 if ( $res ) {
-	$ret = $res->fetch_assoc();
+	$ret = $res->fetch_object();
 	$res->free();
 	$mysqli->close();
 	header( 'Content-Type: application/json' );
