@@ -25,14 +25,19 @@ $res = $mysqli->query( "SELECT `id`, `pass`, `email`, `firstname`, `lastname`, `
 	`username` = '$email'" );
 
 if ( $res ) {
-	$ret = $res->fetch_object();
+	$ret = $mysqli->affected_rows > 0
+		? $res->fetch_object()
+		: null;
 	$res->free();
 	$mysqli->close();
-	if ( password_verify( $POSTpass, $ret->pass ) ) {
+	if ( $ret && password_verify( $POSTpass, $ret->pass ) ) {
 		unset( $ret->pass );
 		$_SESSION[ 'me' ] = $ret;
 		header( 'Content-Type: application/json' );
 		echo json_encode( $ret );
+	} else {
+		http_response_code( 401 );
+		die();
 	}
 } else {
 	http_response_code( 500 );
