@@ -8,19 +8,21 @@ if ( isset( $_SESSION[ 'me' ] ) ) {
 	die( json_encode( $_SESSION[ 'me' ] ) );
 }
 
-$POSTusername = $_POST[ 'username' ] ?? null;
+$POSTemail = $_POST[ 'email' ] ?? null;
 $POSTpass = $_POST[ 'pass' ] ?? null;
 
-if ( !$POSTusername || !$POSTpass ) {
+if ( !$POSTemail || !$POSTpass ) {
 	http_response_code( 400 );
 	die();
 }
 
 require_once( 'common/connection.php' );
 
-$username = $mysqli->real_escape_string( $POSTusername );
+$email = $mysqli->real_escape_string( $POSTemail );
 $res = $mysqli->query( "SELECT `id`, `pass`, `email`, `firstname`, `lastname`, `username`
-	FROM `users` WHERE `username`='$username'" );
+	FROM `users` WHERE
+	`email` = '$email' OR
+	`username` = '$email'" );
 
 if ( $res ) {
 	$ret = $res->fetch_object();
