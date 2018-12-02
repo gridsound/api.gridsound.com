@@ -2,6 +2,12 @@
 
 error_reporting( -1 );
 
+session_start();
+if ( isset( $_SESSION[ 'me' ] ) ) {
+	header( 'Content-Type: application/json' );
+	die( json_encode( $_SESSION[ 'me' ] ) );
+}
+
 $POSTpass = $_POST[ 'pass' ] ?? '';
 $POSTemail = $_POST[ 'email' ] ?? '';
 $POSTusername = $_POST[ 'username' ] ?? '';
@@ -31,7 +37,7 @@ $res = $mysqli->query( "INSERT INTO `users` (
 if ( $res ) {
 	$code = addThingToVerify( $mysqli, $id, $email );
 	$mysqli->close();
-	if ( 0 && $code ) {
+	if ( $code ) {
 		sendEmail( $email, 'Email confirmation',
 			"Hi $username,\r\n\r\n" .
 			"Welcome to GridSound !\r\n" .
@@ -39,12 +45,14 @@ if ( $res ) {
 			"https://api.gridsound.com/verify?id=$id&data=$email&code=$code"
 		);
 	}
-	header( 'Content-Type: application/json' );
-	echo json_encode( array(
+	$_SESSION[ 'me' ] = ( object )[
 		'id' => $id,
 		'email' => $email,
 		'username' => $username,
-	) );
+	];
+	http_response_code( 201 );
+	header( 'Content-Type: application/json' );
+	echo json_encode( $_SESSION[ 'me' ] );
 } else {
 	http_response_code( 500 );
 	die( $mysqli->error );
