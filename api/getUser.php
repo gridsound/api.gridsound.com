@@ -2,14 +2,16 @@
 
 error_reporting( -1 );
 
-if ( !isset( $_GET[ 'id' ] ) ) {
+$GETid = $_GET[ 'id' ] ?? null;
+
+if ( !$GETid ) {
 	http_response_code( 400 );
 	die();
 }
 
 require_once( 'common/connection.php' );
 
-$id = $mysqli->real_escape_string( $_GET[ 'id' ] );
+$id = $mysqli->real_escape_string( $GETid );
 $res = $mysqli->query( "SELECT `id`, `email`, `firstname`, `lastname`, `username`
 	FROM `users` WHERE `id`='$id'" );
 
