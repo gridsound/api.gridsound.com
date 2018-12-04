@@ -12,7 +12,10 @@ if ( !$GETid ) {
 require_once( 'common/connection.php' );
 
 $id = $mysqli->real_escape_string( $GETid );
-$res = $mysqli->query( "SELECT `id`, `data` FROM `compositions` WHERE `iduser`='$id'" );
+$res = $mysqli->query( "SELECT `id`, `data`
+	FROM `compositions` WHERE
+	`iduser` = '$id' AND
+	`public` = 1" );
 
 if ( $res ) {
 	$arr = array();
