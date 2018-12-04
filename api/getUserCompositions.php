@@ -19,7 +19,7 @@ $res = $mysqli->query( "SELECT `id`, `data`
 
 if ( $res ) {
 	$arr = array();
-	while ( $row = $res->fetch_row() ) {
+	while ( $row = $res->fetch_object() ) {
 		$arr[] = $row;
 	}
 	$res->free();
