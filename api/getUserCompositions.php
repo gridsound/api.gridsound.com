@@ -2,11 +2,12 @@
 
 error_reporting( -1 );
 
+require_once( 'common/sendJSON.php' );
+
 $GETid = $_GET[ 'id' ] ?? null;
 
 if ( !$GETid ) {
-	http_response_code( 400 );
-	die();
+	sendJSON( 400 );
 }
 
 require_once( 'common/connection.php' );
@@ -24,9 +25,7 @@ if ( $res ) {
 	}
 	$res->free();
 	$mysqli->close();
-	header( 'Content-Type: application/json' );
-	echo json_encode( $arr );
+	sendJSON( 200, $arr );
 } else {
-	http_response_code( 500 );
-	die( $mysqli->error );
+	sendJSON( 500, $mysqli->error );
 }

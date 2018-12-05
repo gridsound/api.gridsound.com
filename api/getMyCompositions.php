@@ -2,12 +2,13 @@
 
 error_reporting( -1 );
 
+require_once( 'common/sendJSON.php' );
+
 session_start();
 $me = $_SESSION[ 'me' ] ?? null;
 
 if ( !$me ) {
-	http_response_code( 401 );
-	die();
+	sendJSON( 401 );
 }
 
 require_once( 'common/connection.php' );
@@ -23,9 +24,7 @@ if ( $res ) {
 	}
 	$res->free();
 	$mysqli->close();
-	header( 'Content-Type: application/json' );
-	echo json_encode( $arr );
+	sendJSON( 200, $arr );
 } else {
-	http_response_code( 500 );
-	die( $mysqli->error );
+	sendJSON( 500, $mysqli->error );
 }

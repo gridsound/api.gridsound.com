@@ -2,13 +2,14 @@
 
 error_reporting( -1 );
 
+require_once( 'common/sendJSON.php' );
+
 $GETid = $_GET[ 'id' ] ?? null;
 $GETdata = $_GET[ 'data' ] ?? null;
 $GETcode = $_GET[ 'code' ] ?? null;
 
 if ( !$GETid || !$GETdata || !$GETcode ) {
-	http_response_code( 400 );
-	die();
+	sendJSON( 400 );
 }
 
 require_once( 'common/connection.php' );
@@ -31,11 +32,9 @@ if ( $res ) {
 			header( 'Location: https://gridsound.com' );
 		}
 	} else {
-		http_response_code( 404 );
-		die( "No match for '$data' with code '$code' (the code could be expired)" );
+		sendJSON( 404, "No match for '$data' with code '$code' (the code could be expired)" );
 	}
 }
 if ( !$res ) {
-	http_response_code( 500 );
-	die( $mysqli->error );
+	sendJSON( 500, $mysqli->error );
 }

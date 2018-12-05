@@ -2,11 +2,12 @@
 
 error_reporting( -1 );
 
+require_once( 'common/sendJSON.php' );
+
 $POSTconfirm = $_POST[ 'confirm' ] ?? null;
 
 if ( $POSTconfirm !== 'true' ) {
-	http_response_code( 400 );
-	die();
+	sendJSON( 400 );
 }
 
 session_start();

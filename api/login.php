@@ -2,18 +2,18 @@
 
 error_reporting( -1 );
 
+require_once( 'common/sendJSON.php' );
+
 session_start();
 if ( isset( $_SESSION[ 'me' ] ) ) {
-	header( 'Content-Type: application/json' );
-	die( json_encode( $_SESSION[ 'me' ] ) );
+	sendJSON( 200, $_SESSION[ 'me' ] );
 }
 
 $POSTemail = $_POST[ 'email' ] ?? null;
 $POSTpass = $_POST[ 'pass' ] ?? null;
 
 if ( !$POSTemail || !$POSTpass ) {
-	http_response_code( 400 );
-	die();
+	sendJSON( 400 );
 }
 
 require_once( 'common/connection.php' );
@@ -33,13 +33,10 @@ if ( $res ) {
 	if ( $ret && password_verify( $POSTpass, $ret->pass ) ) {
 		unset( $ret->pass );
 		$_SESSION[ 'me' ] = $ret;
-		header( 'Content-Type: application/json' );
-		echo json_encode( $ret );
+		sendJSON( 200, $ret );
 	} else {
-		http_response_code( 401 );
-		die();
+		sendJSON( 401 );
 	}
 } else {
-	http_response_code( 500 );
-	die( $mysqli->error );
+	sendJSON( 500, $mysqli->error );
 }
