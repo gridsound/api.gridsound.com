@@ -22,3 +22,4 @@ if ( ini_get( 'session.use_cookies' ) ) {
 if ( session_status() === PHP_SESSION_ACTIVE ) {
 	session_destroy();
 }
+sendJSON( 200 );
