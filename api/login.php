@@ -12,6 +12,7 @@ if ( isset( $_SESSION[ 'me' ] ) ) {
 	sendJSON( 200, $_SESSION[ 'me' ] );
 }
 
+$_POST = json_decode( file_get_contents( 'php://input' ), true );
 $POSTemail = $_POST[ 'email' ] ?? null;
 $POSTpass = $_POST[ 'pass' ] ?? null;
 
