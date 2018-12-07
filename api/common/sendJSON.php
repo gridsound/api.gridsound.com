@@ -3,6 +3,7 @@
 function sendJSON( $httpcode, $data = null ) {
 	$obj = ( object )[
 		'ok' => $httpcode >= 200 && $httpcode < 300,
+		'code' => $httpcode,
 		'data' => $data ?? ( object )[],
 	];
 	if ( is_string( $data ) ) {
