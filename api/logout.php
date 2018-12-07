@@ -3,10 +3,14 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/enableCors.php' );
 
+enableCors();
+
+$_POST = json_decode( file_get_contents( 'php://input' ), true );
 $POSTconfirm = $_POST[ 'confirm' ] ?? null;
 
-if ( $POSTconfirm !== 'true' ) {
+if ( $POSTconfirm !== true ) {
 	sendJSON( 400 );
 }
 
