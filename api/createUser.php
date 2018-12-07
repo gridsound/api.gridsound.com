@@ -20,6 +20,7 @@ $POSTusername = $_POST[ 'username' ] ?? '';
 if (
 	mb_strlen( $POSTpass ) < 6 ||
 	mb_strlen( $POSTusername ) < 4 ||
+	!preg_match( '/^\w*$/', $POSTusername ) ||
 	!filter_var( $POSTemail, FILTER_VALIDATE_EMAIL )
 ) {
 	sendJSON( 400 );
