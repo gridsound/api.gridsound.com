@@ -14,8 +14,8 @@ if ( isset( $_SESSION[ 'me' ] ) ) {
 
 $_POST = json_decode( file_get_contents( 'php://input' ), true );
 $POSTpass = $_POST[ 'pass' ] ?? '';
-$POSTemail = $_POST[ 'email' ] ?? '';
-$POSTusername = $_POST[ 'username' ] ?? '';
+$POSTemail = strtolower( trim( $_POST[ 'email' ] ?? '' ) );
+$POSTusername = trim( $_POST[ 'username' ] ?? '' );
 
 $errMsg = null;
 $POSTpassLen = mb_strlen( $POSTpass );
