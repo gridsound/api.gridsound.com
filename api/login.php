@@ -17,7 +17,7 @@ $POSTemail = $_POST[ 'email' ] ?? null;
 $POSTpass = $_POST[ 'pass' ] ?? null;
 
 if ( !$POSTemail || !$POSTpass ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'login:fail' );
 }
 
 require_once( 'common/connection.php' );
@@ -39,7 +39,7 @@ if ( $res ) {
 		$_SESSION[ 'me' ] = $ret;
 		sendJSON( 200, $ret );
 	} else {
-		sendJSON( 401 );
+		sendJSON( 401, 'login:fail' );
 	}
 } else {
 	sendJSON( 500, $mysqli->error );
