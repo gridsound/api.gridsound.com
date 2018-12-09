@@ -17,13 +17,19 @@ $POSTpass = $_POST[ 'pass' ] ?? '';
 $POSTemail = $_POST[ 'email' ] ?? '';
 $POSTusername = $_POST[ 'username' ] ?? '';
 
-if (
-	mb_strlen( $POSTpass ) < 6 ||
-	mb_strlen( $POSTusername ) < 4 ||
-	!preg_match( '/^\w*$/', $POSTusername ) ||
-	!filter_var( $POSTemail, FILTER_VALIDATE_EMAIL )
-) {
-	sendJSON( 400 );
+$errMsg = null;
+$POSTpassLen = mb_strlen( $POSTpass );
+$POSTemailLen = mb_strlen( $POSTemail );
+$POSTusernameLen = mb_strlen( $POSTusername );
+
+     if ( $POSTpassLen < 6 ) { $errMsg = 'pass:too-short'; }
+else if ( $POSTemailLen > 128 ) { $errMsg = 'email:too-long'; }
+else if ( $POSTusernameLen < 4 ) { $errMsg = 'username:too-short'; }
+else if ( $POSTusernameLen > 32 ) { $errMsg = 'username:too-long'; }
+else if ( !preg_match( '/^\w*$/', $POSTusername ) ) { $errMsg = 'username:bad-format'; }
+else if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) { $errMsg = 'email:bad-format'; }
+if ( $errMsg ) {
+	sendJSON( 400, $errMsg );
 }
 
 require_once( 'common/connection.php' );
@@ -57,5 +63,9 @@ if ( $res ) {
 	];
 	sendJSON( 201, $_SESSION[ 'me' ] );
 } else {
-	sendJSON( 500, $mysqli->error );
+	$err = $mysqli->error;
+	if ( strpos( $err, 'Duplicate' ) === 0 ) {
+		$err = explode( '\'', $err )[ 3 ] . ':duplicate';
+	}
+	sendJSON( 500, $err );
 }
