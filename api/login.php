@@ -23,7 +23,7 @@ if ( !$POSTemail || !$POSTpass ) {
 require_once( 'common/connection.php' );
 
 $email = $mysqli->real_escape_string( $POSTemail );
-$res = $mysqli->query( "SELECT `id`, `pass`, `email`, `firstname`, `lastname`, `username`
+$res = $mysqli->query( "SELECT `id`, `pass`, `email`, `firstname`, `lastname`, `username`, `avatar`
 	FROM `users` WHERE
 	`email` = '$email' OR
 	`username` = '$email'" );

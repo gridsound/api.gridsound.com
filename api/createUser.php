@@ -61,6 +61,7 @@ if ( $res ) {
 		'id' => $id,
 		'email' => $email,
 		'username' => $username,
+		'avatar' => $avatar,
 	];
 	sendJSON( 201, $_SESSION[ 'me' ] );
 } else {
