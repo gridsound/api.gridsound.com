@@ -41,9 +41,10 @@ $id = uuid();
 $pass = password_hash( $POSTpass, PASSWORD_BCRYPT );
 $email = $mysqli->real_escape_string( $POSTemail );
 $username = $mysqli->real_escape_string( $POSTusername );
+$avatar = 'https://www.gravatar.com/avatar/' . md5( $email );
 $res = $mysqli->query( "INSERT INTO `users` (
-	`id`,  `status`,          `email`,  `pass`,  `username`, `created` ) VALUES (
-	'$id', 'EMAIL_TO_VERIFY', '$email', '$pass', '$username', NOW() )" );
+	`id`,  `status`,          `email`,  `pass`,  `username`,  `avatar`, `created` ) VALUES (
+	'$id', 'EMAIL_TO_VERIFY', '$email', '$pass', '$username', '$avatar', NOW() )" );
 
 if ( $res ) {
 	$code = addThingToVerify( $mysqli, $id, $email );

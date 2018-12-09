@@ -33,6 +33,7 @@ CREATE TABLE `users` (
   `firstname` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `lastname` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `username` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
