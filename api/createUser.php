@@ -35,6 +35,7 @@ if ( $errMsg ) {
 require_once( 'common/connection.php' );
 require_once( 'common/addThingToVerify.php' );
 require_once( 'common/sendEmail.php' );
+require_once( 'common/sendEmailConfirmation.php' );
 require_once( 'common/uuid.php' );
 
 $id = uuid();
@@ -51,12 +52,7 @@ if ( $res ) {
 	$code = addThingToVerify( $mysqli, $id, $email );
 	$mysqli->close();
 	if ( $code ) {
-		sendEmail( $email, 'Email confirmation',
-			"Hi $username,\r\n\r\n" .
-			"Welcome to GridSound !\r\n" .
-			"Clicking that link will confirm your email :\r\n" .
-			"https://api.gridsound.com/verify?id=$id&data=$email&code=$code"
-		);
+		sendEmailConfirmation( $id, $username, $email, $code );
 	}
 	$_SESSION[ 'me' ] = ( object )[
 		'id' => $id,
