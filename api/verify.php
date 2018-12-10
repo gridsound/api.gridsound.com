@@ -3,6 +3,9 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/enableCors.php' );
+
+enableCors();
 
 $GETid = $_GET[ 'id' ] ?? null;
 $GETdata = $_GET[ 'data' ] ?? null;
@@ -29,6 +32,11 @@ if ( $res ) {
 			$res = $mysqli->query( "UPDATE `users` SET `status`='NORMAL' WHERE `id`='$id'" );
 		}
 		if ( $res ) {
+			session_start();
+			$me = $_SESSION[ 'me' ] ?? null;
+			if ( $me ) {
+				$me->status = 'NORMAL';
+			}
 			header( 'Location: https://gridsound.com' );
 		}
 	} else {
