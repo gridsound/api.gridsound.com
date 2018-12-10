@@ -42,9 +42,10 @@ $pass = password_hash( $POSTpass, PASSWORD_BCRYPT );
 $email = $mysqli->real_escape_string( $POSTemail );
 $username = $mysqli->real_escape_string( $POSTusername );
 $avatar = 'https://www.gravatar.com/avatar/' . md5( $email );
+$status = 'EMAIL_TO_VERIFY';
 $res = $mysqli->query( "INSERT INTO `users` (
-	`id`,  `status`,          `email`,  `pass`,  `username`,  `avatar`, `created` ) VALUES (
-	'$id', 'EMAIL_TO_VERIFY', '$email', '$pass', '$username', '$avatar', NOW() )" );
+	`id`,  `status`,  `email`,  `pass`,  `username`,  `avatar`, `created` ) VALUES (
+	'$id', '$status', '$email', '$pass', '$username', '$avatar', NOW() )" );
 
 if ( $res ) {
 	$code = addThingToVerify( $mysqli, $id, $email );
@@ -60,6 +61,7 @@ if ( $res ) {
 	$_SESSION[ 'me' ] = ( object )[
 		'id' => $id,
 		'email' => $email,
+		'status' => $status,
 		'username' => $username,
 		'avatar' => $avatar,
 	];
