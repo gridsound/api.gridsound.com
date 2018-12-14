@@ -14,6 +14,7 @@ if ( !$GETusername ) {
 }
 
 require_once( 'common/connection.php' );
+require_once( 'common/getCompositions.php' );
 
 $username = $mysqli->real_escape_string( $GETusername );
 $res = $mysqli->query( "SELECT `id`, `emailpublic`,
@@ -21,14 +22,23 @@ $res = $mysqli->query( "SELECT `id`, `emailpublic`,
 	FROM `users` WHERE `username`='$username'" );
 
 if ( $res ) {
-	$ret = $res->fetch_object();
-	$found = $mysqli->affected_rows > 0;
+	$user = $res->fetch_object();
+	$userfound = $mysqli->affected_rows > 0;
 	$res->free();
+	$cmps = $userfound
+		? getCompositions( $mysqli, $user->id, true )
+		: null;
+	$error = $mysqli->error;
 	$mysqli->close();
-	if ( $found ) {
-		sendJSON( 200, $ret );
-	} else {
+	if ( !$userfound ) {
 		sendJSON( 404 );
+	} else if ( $cmps === null ) {
+		sendJSON( 500, $error );
+	} else {
+		sendJSON( 200, ( object )[
+			'user' => $user,
+			'compositions' => $cmps,
+		] );
 	}
 } else {
 	sendJSON( 500, $mysqli->error );

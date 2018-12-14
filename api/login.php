@@ -21,6 +21,7 @@ if ( !$POSTemail || !$POSTpass ) {
 }
 
 require_once( 'common/connection.php' );
+require_once( 'common/getCompositions.php' );
 
 $email = $mysqli->real_escape_string( $POSTemail );
 $res = $mysqli->query( "SELECT `id`, `pass`, `email`, `status`,
@@ -30,17 +31,27 @@ $res = $mysqli->query( "SELECT `id`, `pass`, `email`, `status`,
 	`username` = '$email'" );
 
 if ( $res ) {
-	$ret = $mysqli->affected_rows > 0
+	$cmps = null;
+	$user = $mysqli->affected_rows > 0
 		? $res->fetch_object()
 		: null;
 	$res->free();
+	$authOk = $user && password_verify( $POSTpass, $user->pass );
+	unset( $user->pass );
+	if ( $authOk ) {
+		$cmps = getCompositions( $mysqli, $user->id, false );
+	}
 	$mysqli->close();
-	if ( $ret && password_verify( $POSTpass, $ret->pass ) ) {
-		unset( $ret->pass );
-		$_SESSION[ 'me' ] = $ret;
-		sendJSON( 200, $ret );
-	} else {
+	if ( !$authOk ) {
 		sendJSON( 401, 'login:fail' );
+	} else if ( !$res || $cmps === null ) {
+		sendJSON( 500, $mysqli->error );
+	} else {
+		$_SESSION[ 'me' ] = ( object )[
+			'user' => $user,
+			'compositions' => $cmps,
+		];
+		sendJSON( 200, $_SESSION[ 'me' ] );
 	}
 } else {
 	sendJSON( 500, $mysqli->error );

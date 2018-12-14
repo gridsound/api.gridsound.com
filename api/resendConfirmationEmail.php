@@ -10,7 +10,7 @@ session_start();
 
 $_POST = json_decode( file_get_contents( 'php://input' ), true );
 $POSTemail = $_POST[ 'email' ] ?? null;
-$me = $_SESSION[ 'me' ] ?? null;
+$me = $_SESSION[ 'me' ]->user ?? null;
 
      if ( !$me ) { sendJSON( 401, "no-auth" ); }
 else if ( $POSTemail !== $me->email ) { sendJSON( 400, "email-not-match" ); }

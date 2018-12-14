@@ -33,7 +33,7 @@ if ( $res ) {
 		}
 		if ( $res ) {
 			session_start();
-			$me = $_SESSION[ 'me' ] ?? null;
+			$me = $_SESSION[ 'me' ]->user ?? null;
 			if ( $me ) {
 				$me->status = 'NORMAL';
 			}
