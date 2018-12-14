@@ -13,7 +13,7 @@ if ( !$GETid ) {
 require_once( 'common/connection.php' );
 
 $id = $mysqli->real_escape_string( $GETid );
-$res = $mysqli->query( "SELECT `id`, `email`, `firstname`, `lastname`, `username`
+$res = $mysqli->query( "SELECT `id`, `emailpublic`, `firstname`, `lastname`, `username`
 	FROM `users` WHERE `id`='$id'" );
 
 if ( $res ) {
