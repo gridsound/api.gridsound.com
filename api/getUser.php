@@ -16,7 +16,8 @@ if ( !$GETusername ) {
 require_once( 'common/connection.php' );
 
 $username = $mysqli->real_escape_string( $GETusername );
-$res = $mysqli->query( "SELECT `id`, `emailpublic`, `firstname`, `lastname`, `username`
+$res = $mysqli->query( "SELECT `id`, `emailpublic`,
+	`firstname`, `lastname`, `username`, `avatar`
 	FROM `users` WHERE `username`='$username'" );
 
 if ( $res ) {
