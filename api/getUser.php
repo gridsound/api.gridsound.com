@@ -4,17 +4,17 @@ error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
 
-$GETid = $_GET[ 'id' ] ?? null;
+$GETusername = $_GET[ 'username' ] ?? null;
 
-if ( !$GETid ) {
+if ( !$GETusername ) {
 	sendJSON( 400 );
 }
 
 require_once( 'common/connection.php' );
 
-$id = $mysqli->real_escape_string( $GETid );
+$username = $mysqli->real_escape_string( $GETusername );
 $res = $mysqli->query( "SELECT `id`, `emailpublic`, `firstname`, `lastname`, `username`
-	FROM `users` WHERE `id`='$id'" );
+	FROM `users` WHERE `username`='$username'" );
 
 if ( $res ) {
 	$ret = $res->fetch_object();
