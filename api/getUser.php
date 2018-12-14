@@ -22,9 +22,14 @@ $res = $mysqli->query( "SELECT `id`, `emailpublic`,
 
 if ( $res ) {
 	$ret = $res->fetch_object();
+	$found = $mysqli->affected_rows > 0;
 	$res->free();
 	$mysqli->close();
-	sendJSON( 200, $ret );
+	if ( $found ) {
+		sendJSON( 200, $ret );
+	} else {
+		sendJSON( 404 );
+	}
 } else {
 	sendJSON( 500, $mysqli->error );
 }
