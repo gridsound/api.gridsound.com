@@ -3,6 +3,9 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/enableCors.php' );
+
+enableCors();
 
 $GETusername = $_GET[ 'username' ] ?? null;
 
