@@ -24,7 +24,7 @@ require_once( 'common/connection.php' );
 require_once( 'common/getCompositions.php' );
 
 $email = $mysqli->real_escape_string( $POSTemail );
-$res = $mysqli->query( "SELECT `id`, `pass`, `email`, `status`,
+$res = $mysqli->query( "SELECT `id`, `pass`, `email`, `emailpublic`, `status`,
 	`firstname`, `lastname`, `username`, `avatar`
 	FROM `users` WHERE
 	`email` = '$email' OR
