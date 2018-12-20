@@ -36,8 +36,11 @@ if ( $res ) {
 		? $res->fetch_object()
 		: null;
 	$res->free();
-	$authOk = $user && password_verify( $POSTpass, $user->pass );
-	unset( $user->pass );
+	$authOk = false;
+	if ( $user ) {
+		$authOk = password_verify( $POSTpass, $user->pass );
+		unset( $user->pass );
+	}
 	if ( $authOk ) {
 		$cmps = getCompositions( $mysqli, $user->id, false );
 	}
