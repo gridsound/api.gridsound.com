@@ -26,9 +26,9 @@ CREATE TABLE `thingsNotVerified` (
 
 CREATE TABLE `users` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` set('NORMAL','EMAIL_TO_VERIFY') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'NORMAL',
   `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `emailpublic` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `emailchecked` tinyint(1) NOT NULL DEFAULT '0',
+  `emailpublic` tinyint(1) NOT NULL DEFAULT '0',
   `pass` char(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `firstname` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `lastname` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
