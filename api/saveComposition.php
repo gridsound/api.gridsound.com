@@ -14,10 +14,8 @@ $POSTcmp = json_decode( $_POST[ 'composition' ] ?? null );
 
 if ( !$me ) {
 	sendJSON( 401 );
-} else if ( $me->user->status === 'EMAIL_TO_VERIFY' ) {
+} else if ( $me->user->emailchecked !== '1' ) {
 	sendJSON( 401, 'email-not-verified' );
-} else if ( $me->user->status !== 'NORMAL' ) {
-	sendJSON( 403 );
 } else if ( !$POSTcmp ) {
 	sendJSON( 400 );
 }

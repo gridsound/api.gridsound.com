@@ -14,7 +14,7 @@ $me = $_SESSION[ 'me' ]->user ?? null;
 
      if ( !$me ) { sendJSON( 401, "no-auth" ); }
 else if ( $POSTemail !== $me->email ) { sendJSON( 400, "email-not-match" ); }
-else if ( $me->status !== 'EMAIL_TO_VERIFY' ) { sendJSON( 400, "email-verified" ); }
+else if ( $me->emailchecked === '1' ) { sendJSON( 400, "email-verified" ); }
 
 require_once( 'common/connection.php' );
 require_once( 'common/sendEmail.php' );

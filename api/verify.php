@@ -29,13 +29,13 @@ $res = $mysqli->query( "DELETE FROM `thingsNotVerified` WHERE
 if ( $res ) {
 	if ( $mysqli->affected_rows > 0 ) {
 		if ( mb_strpos( $data, '@' ) !== false ) {
-			$res = $mysqli->query( "UPDATE `users` SET `status`='NORMAL' WHERE `id`='$id'" );
+			$res = $mysqli->query( "UPDATE `users` SET `emailchecked`='1' WHERE `id`='$id'" );
 		}
 		if ( $res ) {
 			session_start();
 			$me = $_SESSION[ 'me' ]->user ?? null;
 			if ( $me ) {
-				$me->status = 'NORMAL';
+				$me->emailchecked = '1';
 			}
 			header( 'Location: https://gridsound.com' );
 		}
