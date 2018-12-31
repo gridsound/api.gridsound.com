@@ -19,6 +19,10 @@ $POSTlastname = trim( $_POST[ 'lastname' ] ?? $me->lastname );
 $POSTfirstname = trim( $_POST[ 'firstname' ] ?? $me->firstname );
 $POSTemailpublic = $_POST[ 'emailpublic' ] ?? null;
 
+if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
+	sendJSON( 400, 'email:bad-format' );
+}
+
 require_once( 'common/connection.php' );
 
 $id = $me->id;
