@@ -17,7 +17,8 @@ require_once( 'common/connection.php' );
 require_once( 'common/getCompositions.php' );
 
 $username = $mysqli->real_escape_string( $GETusername );
-$res = $mysqli->query( "SELECT `id`, `emailpublic`,
+$res = $mysqli->query( "SELECT
+	`id`, `email`, `emailpublic`, `emailchecked`,
 	`firstname`, `lastname`, `username`, `avatar`
 	FROM `users` WHERE `username`='$username'" );
 
@@ -35,6 +36,11 @@ if ( $res ) {
 	} else if ( $cmps === null ) {
 		sendJSON( 500, $error );
 	} else {
+		if ( $user->emailpublic === '0' || $user->emailchecked === '0' ) {
+			unset( $user->email );
+		}
+		unset( $user->emailpublic );
+		unset( $user->emailchecked );
 		sendJSON( 200, ( object )[
 			'user' => $user,
 			'compositions' => $cmps,
