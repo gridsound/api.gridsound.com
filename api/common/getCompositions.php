@@ -11,6 +11,7 @@ function getCompositions( &$mysqli, $iduser, $onlyPublic ) {
 	if ( $res ) {
 		$cmps = array();
 		while ( $row = $res->fetch_object() ) {
+			$row->data = base64_decode( $row->data, true );
 			$cmps[] = $row;
 		}
 		$res->free();

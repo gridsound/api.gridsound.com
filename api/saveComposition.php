@@ -10,24 +10,43 @@ session_start();
 
 $me = $_SESSION[ 'me' ] ?? null;
 $_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTcmp = json_decode( $_POST[ 'composition' ] ?? null );
+$POSTcmp = $_POST[ 'composition' ] ?? null;
+$data = json_encode( $POSTcmp );
 
 if ( !$me ) {
 	sendJSON( 401 );
 } else if ( $me->user->emailchecked !== '1' ) {
 	sendJSON( 401, 'email-not-verified' );
-} else if ( !$POSTcmp ) {
+} else if ( !$POSTcmp || !$data ) {
 	sendJSON( 400 );
 }
 
 require_once( 'common/connection.php' );
 
-$id = $POSTcmp->id;
-$iduser = $me->user->id;
-$data = json_encode( $POSTcmp );
-$res = $mysqli->query( "INSERT INTO `compositions` (
-	`id`,  `iduser`,  `data`, `created`, `updated` ) VALUES (
-	'$id', '$iduser', '$data', NOW(),     NOW() )" );
+$id = $mysqli->real_escape_string( $POSTcmp[ 'id' ] );
+$iduser = $mysqli->real_escape_string( $me->user->id );
+$data64 = base64_encode( $data );
+$res = $mysqli->query( "UPDATE `compositions` SET
+	`data` = '$data64',
+	`updated` = NOW()
+	WHERE `id` = '$id'
+	AND `iduser` = '$iduser'" );
+
+if ( $res ) {
+	if ( $mysqli->affected_rows === 0 ) {
+		$res = $mysqli->query( "INSERT INTO `compositions` (
+			`id`,  `iduser`,  `data`,   `created`, `updated` ) VALUES (
+			'$id', '$iduser', '$data64', NOW(),     NOW() )" );
+		$me->compositions[] = ( object )[
+			'id' => $id,
+			'data' => $data,
+			'public' => '1',
+		];
+	} else {
+		$ind = array_search( $id, array_column( $me->compositions, 'id' ) );
+		$me->compositions[ $ind ]->data = $data;
+	}
+}
 
 if ( $res ) {
 	$mysqli->close();
