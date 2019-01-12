@@ -10,7 +10,7 @@ session_start();
 
 $me = $_SESSION[ 'me' ] ?? null;
 $_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTcmp = $_POST[ 'composition' ] ?? null;
+$POSTcmp = json_decode( $_POST[ 'composition' ] ?? null );
 $data = json_encode( $POSTcmp );
 
 if ( !$me ) {
@@ -23,7 +23,7 @@ if ( !$me ) {
 
 require_once( 'common/connection.php' );
 
-$id = $mysqli->real_escape_string( $POSTcmp[ 'id' ] );
+$id = $mysqli->real_escape_string( $POSTcmp->id );
 $iduser = $mysqli->real_escape_string( $me->user->id );
 $data64 = base64_encode( $data );
 $res = $mysqli->query( "UPDATE `compositions` SET
