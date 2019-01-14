@@ -43,7 +43,7 @@ if ( $res ) {
 			'public' => '1',
 		];
 	} else {
-		$ind = array_search( $id, array_column( $me->compositions, 'id' ) );
+		$ind = array_search( $id, array_column( $me->compositions, 'id' ), true );
 		$me->compositions[ $ind ]->data = $data;
 	}
 }
