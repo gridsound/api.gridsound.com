@@ -33,7 +33,7 @@ $res = $mysqli->query( "SELECT
 
 if ( $res ) {
 	$cmps = null;
-	$user = $mysqli->affected_rows > 0
+	$user = $res->num_rows > 0
 		? $res->fetch_object()
 		: null;
 	$res->free();
