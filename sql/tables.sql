@@ -16,6 +16,13 @@ CREATE TABLE `compositions` (
   `updated` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `passwordForgotten` (
+  `id` int(11) NOT NULL,
+  `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expire` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE `thingsNotVerified` (
   `id` int(11) NOT NULL,
   `iduser` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -42,6 +49,11 @@ ALTER TABLE `compositions`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
+ALTER TABLE `passwordForgotten`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `id` (`id`);
+
 ALTER TABLE `thingsNotVerified`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
@@ -53,8 +65,10 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `username` (`username`);
 
 
+ALTER TABLE `passwordForgotten`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `thingsNotVerified`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
