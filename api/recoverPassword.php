@@ -1,0 +1,67 @@
+<?php
+
+error_reporting( -1 );
+
+require_once( 'common/sendJSON.php' );
+require_once( 'common/enableCors.php' );
+
+enableCors();
+
+$_POST = json_decode( file_get_contents( 'php://input' ), true );
+$POSTemail = $_POST[ 'email' ] ?? null;
+if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
+	sendJSON( 400, 'email:bad-format' );
+}
+
+require_once( 'common/connection.php' );
+
+$email = $mysqli->real_escape_string( $POSTemail );
+$res = $mysqli->query( "SELECT `username` FROM `users` WHERE `email` = '$email'" );
+if ( !$res ) {
+	sendJSON( 500, $mysqli->error );
+} else if ( $res->num_rows < 1 ) {
+	$res->free();
+	$mysqli->close();
+	sendJSON( 404, 'email:not-found' );
+}
+
+$user = $res->fetch_object();
+$res->free();
+
+$res = $mysqli->query( "SELECT `id` FROM `passwordForgotten` WHERE
+	`email` = '$email' AND
+	`expire` > NOW() - INTERVAL 1 DAY" );
+if ( !$res ) {
+	sendJSON( 500, $mysqli->error );
+} else if ( $res->num_rows > 0 ) {
+	$res->free();
+	$mysqli->close();
+	sendJSON( 409, 'password:already-recovering' );
+}
+
+$res = $mysqli->query( "DELETE FROM `passwordForgotten` WHERE `email` = '$email'" );
+if ( !$res ) {
+	sendJSON( 500, $mysqli->error );
+}
+
+require_once( 'common/uuid.php' );
+require_once( 'common/sendEmail.php' );
+
+$code = uuid();
+$res = $mysqli->query( "INSERT INTO `passwordForgotten`(
+	`email`,  `code`, `expire` ) VALUES (
+	'$email', '$code', NOW() + INTERVAL 1 DAY )" );
+if ( !$res ) {
+	sendJSON( 500, $mysqli->error );
+}
+
+$username = $user->username;
+sendEmail( $email, 'Password recovering',
+	"Hi $username,\r\n\r\n" .
+	"Clicking that link will let you set a new password :\r\n" .
+	"https://gridsound.github.io/#/resetPassword/$email/$code\r\n\r\n" .
+	"If you didn't ask to recover your password then just ignore this email.\r\n" .
+	"But this mean that somebody else has entered your email on this page " .
+	"https://gridsound.github.io/#/forgotPassword"
+);
+sendJSON( 200 );
