@@ -59,9 +59,9 @@ $username = $user->username;
 sendEmail( $email, 'Password recovering',
 	"Hi $username,\r\n\r\n" .
 	"Clicking that link will let you set a new password :\r\n" .
-	"https://gridsound.github.io/#/resetPassword/$email/$code\r\n\r\n" .
+	"https://gridsound.com/#/resetPassword/$email/$code\r\n\r\n" .
 	"If you didn't ask to recover your password then just ignore this email.\r\n" .
 	"But this mean that somebody else has entered your email on this page " .
-	"https://gridsound.github.io/#/forgotPassword"
+	"https://gridsound.com/#/forgotPassword"
 );
 sendJSON( 200 );

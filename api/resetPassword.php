@@ -44,7 +44,7 @@ if ( !$res ) {
 	sendEmail( $email, 'Password changed',
 		"Hi,\r\n\r\n" .
 		"Your password has been reset, you can now log in again on " .
-		"https://gridsound.github.io"
+		"https://gridsound.com/#/auth"
 	);
 	sendJSON( 200 );
 }
