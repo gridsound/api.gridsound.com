@@ -13,11 +13,11 @@ $POSTid = $_POST[ 'id' ] ?? null;
 $me = $_SESSION[ 'me' ] ?? null;
 
 if ( !$me ) {
-	sendJSON( 401 );
+	sendJSON( 401, 'user:not-connected' );
 } else if ( $me->user->emailchecked !== '1' ) {
-	sendJSON( 401, 'email-not-verified' );
+	sendJSON( 403, 'email:not-verified' );
 } else if ( !$POSTid ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'query:bad-format' );
 }
 
 require_once( 'common/connection.php' );

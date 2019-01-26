@@ -10,7 +10,7 @@ enableCors();
 $GETusername = $_GET[ 'username' ] ?? null;
 
 if ( !$GETusername ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'query:bad-format' );
 }
 
 require_once( 'common/connection.php' );

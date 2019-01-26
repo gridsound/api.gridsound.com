@@ -11,7 +11,7 @@ $_POST = json_decode( file_get_contents( 'php://input' ), true );
 $POSTconfirm = $_POST[ 'confirm' ] ?? null;
 
 if ( $POSTconfirm !== true ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'query:bad-format' );
 }
 
 session_start();

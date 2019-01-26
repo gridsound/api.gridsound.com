@@ -14,11 +14,11 @@ $POSTcmp = json_decode( $_POST[ 'composition' ] ?? null );
 $data = json_encode( $POSTcmp );
 
 if ( !$me ) {
-	sendJSON( 401 );
+	sendJSON( 401, 'user:not-connected' );
 } else if ( $me->user->emailchecked !== '1' ) {
-	sendJSON( 401, 'email-not-verified' );
+	sendJSON( 403, 'email:not-verified' );
 } else if ( !$POSTcmp || !$data ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'query:bad-format' );
 }
 
 require_once( 'common/connection.php' );

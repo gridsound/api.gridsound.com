@@ -13,7 +13,7 @@ $POSTpass = $_POST[ 'pass' ] ?? '';
 $POSTemail = $_POST[ 'email' ] ?? null;
 
 if ( !$POSTcode ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'query:bad-format' );
 } if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
 	sendJSON( 400, 'email:bad-format' );
 } if ( mb_strlen( $POSTpass ) < 6 ) {

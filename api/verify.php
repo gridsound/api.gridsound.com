@@ -12,7 +12,7 @@ $GETdata = $_GET[ 'data' ] ?? null;
 $GETcode = $_GET[ 'code' ] ?? null;
 
 if ( !$GETid || !$GETdata || !$GETcode ) {
-	sendJSON( 400 );
+	sendJSON( 400, 'query:bad-format' );
 }
 
 require_once( 'common/connection.php' );

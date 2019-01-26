@@ -13,5 +13,5 @@ $me = $_SESSION[ 'me' ] ?? null;
 if ( $me ) {
 	sendJSON( 200, $me );
 } else {
-	sendJSON( 401 );
+	sendJSON( 401, 'user:not-connected' );
 }

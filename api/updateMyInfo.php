@@ -10,7 +10,7 @@ session_start();
 
 $me = $_SESSION[ 'me' ]->user ?? null;
 if ( !$me ) {
-	sendJSON( 401 );
+	sendJSON( 401, 'user:not-connected' );
 }
 
 $_POST = json_decode( file_get_contents( 'php://input' ), true );

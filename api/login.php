@@ -17,7 +17,7 @@ $POSTemail = $_POST[ 'email' ] ?? null;
 $POSTpass = $_POST[ 'pass' ] ?? null;
 
 if ( !$POSTemail || !$POSTpass ) {
-	sendJSON( 400, 'login:fail' );
+	sendJSON( 400, 'query:bad-format' );
 }
 
 require_once( 'common/connection.php' );
