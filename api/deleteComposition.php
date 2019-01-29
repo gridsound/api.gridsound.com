@@ -33,7 +33,7 @@ if ( $res ) {
 	$mysqli->close();
 	if ( $deleted ) {
 		$ind = array_search( $id, array_column( $me->compositions, 'id' ), true );
-		array_splice( $me->compositions, $ind );
+		array_splice( $me->compositions, $ind, 1 );
 		sendJSON( 200 );
 	} else {
 		sendJSON( 404 );
