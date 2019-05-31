@@ -10,14 +10,14 @@ CREATE TABLE `compositions` (
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `passwordForgotten` (
+CREATE TABLE IF NOT EXISTS `passwordForgotten` (
   `id` int(11) NOT NULL,
   `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expire` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `thingsNotVerified` (
+CREATE TABLE IF NOT EXISTS `thingsNotVerified` (
   `id` int(11) NOT NULL,
   `iduser` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `data` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `thingsNotVerified` (
   `expire` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `emailchecked` tinyint(1) NOT NULL DEFAULT '0',

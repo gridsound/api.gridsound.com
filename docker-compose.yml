@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: gridsound_db
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    command: --init-file /${SQL_FILE} --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./sql/${SQL_FILE}:/${SQL_FILE}
+      - ./mysql-data/:/var/lib/mysql/
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: gridsound_phpmyadmin
+    depends_on: 
+        - db
+    ports:
+        - ${PHPMYADMIN_PORT}:80
+    environment:
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  gridsound_api:
+    image: gridsound_api
+    container_name: gridsound_api
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "${API_PORT}:80"
+    volumes:
+      - ./api:/srv/gridsound_api
