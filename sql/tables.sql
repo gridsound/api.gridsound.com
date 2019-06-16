@@ -41,7 +41,8 @@ CREATE TABLE `users` (
 
 ALTER TABLE `compositions`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `iduser` (`iduser`);
 
 ALTER TABLE `passwordForgotten`
   ADD PRIMARY KEY (`id`),
@@ -50,7 +51,8 @@ ALTER TABLE `passwordForgotten`
 
 ALTER TABLE `thingsNotVerified`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `iduser` (`iduser`);
 
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -63,3 +65,9 @@ ALTER TABLE `passwordForgotten`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `thingsNotVerified`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `compositions`
+  ADD CONSTRAINT `compositions_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `users` (`id`);
+
+ALTER TABLE `thingsNotVerified`
+  ADD CONSTRAINT `thingsNotVerified_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `users` (`id`);
