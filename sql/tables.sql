@@ -1,7 +1,11 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-CREATE TABLE `compositions` (
+CREATE DATABASE IF NOT EXISTS gridsound;
+
+USE gridsound;
+
+CREATE TABLE IF NOT EXISTS `compositions` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `iduser` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '1',
@@ -10,7 +14,14 @@ CREATE TABLE `compositions` (
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE `passwordForgotten` (
+CREATE TABLE IF NOT EXISTS `likes` (
+  `id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `user_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `composition_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `passwordForgotten` (
   `id` int(11) NOT NULL,
   `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -44,6 +55,11 @@ ALTER TABLE `compositions`
   ADD UNIQUE KEY `id` (`id`),
   ADD KEY `iduser` (`iduser`);
 
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `like_user_compo_id` (`user_id`,`composition_id`) USING BTREE,
+  ADD KEY `compo_id_fk` (`composition_id`);
+
 ALTER TABLE `passwordForgotten`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
@@ -65,9 +81,16 @@ ALTER TABLE `passwordForgotten`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `thingsNotVerified`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 ALTER TABLE `compositions`
   ADD CONSTRAINT `compositions_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `users` (`id`);
+
+ALTER TABLE `likes`
+  ADD CONSTRAINT `compo_id_fk` FOREIGN KEY (`composition_id`) REFERENCES `compositions` (`id`),
+  ADD CONSTRAINT `user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `thingsNotVerified`
   ADD CONSTRAINT `thingsNotVerified_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `users` (`id`);
