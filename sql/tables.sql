@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `compositions` (
 
 CREATE TABLE IF NOT EXISTS `likes` (
   `id` int(11) NOT NULL,
-  `date` datetime NOT NULL,
+  `created` datetime NOT NULL,
   `user_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `composition_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
