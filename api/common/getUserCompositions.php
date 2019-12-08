@@ -1,6 +1,6 @@
 <?php
 
-function getCompositions( &$mysqli, $iduser, $onlyPublic ) {
+function getUserCompositions( &$mysqli, $iduser, $onlyPublic ) {
 	$query = "SELECT `id`, `public`, `data`
 		FROM `compositions`
 		WHERE `iduser` = '$iduser'";

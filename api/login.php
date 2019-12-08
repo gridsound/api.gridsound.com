@@ -22,7 +22,7 @@ if ( !$POSTemail || !$POSTpass ) {
 
 require_once( 'common/connection.php' );
 require_once( 'common/getUser.php' );
-require_once( 'common/getCompositions.php' );
+require_once( 'common/getUserCompositions.php' );
 
 $user = getUser( $mysqli, 'usernameEmail', $POSTemail, true );
 $authOk = false;
@@ -37,7 +37,7 @@ if ( $authOk === false ) {
 	sendJSON( 401, 'login:fail' );
 }
 
-$cmps = getCompositions( $mysqli, $user->id, false );
+$cmps = getUserCompositions( $mysqli, $user->id, false );
 if ( $cmps === null ) {
 	sendJSON( 500, $mysqli->error );
 }

@@ -14,7 +14,7 @@ if ( !$GETusername ) {
 }
 
 require_once( 'common/connection.php' );
-require_once( 'common/getCompositions.php' );
+require_once( 'common/getUserCompositions.php' );
 
 $username = $mysqli->real_escape_string( $GETusername );
 $res = $mysqli->query( "SELECT
@@ -27,7 +27,7 @@ if ( $res ) {
 	$userfound = $mysqli->affected_rows > 0;
 	$res->free();
 	$cmps = $userfound
-		? getCompositions( $mysqli, $user->id, true )
+		? getUserCompositions( $mysqli, $user->id, true )
 		: null;
 	$error = $mysqli->error;
 	$mysqli->close();
