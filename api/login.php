@@ -21,42 +21,30 @@ if ( !$POSTemail || !$POSTpass ) {
 }
 
 require_once( 'common/connection.php' );
+require_once( 'common/getUser.php' );
 require_once( 'common/getCompositions.php' );
 
-$email = $mysqli->real_escape_string( $POSTemail );
-$res = $mysqli->query( "SELECT
-	`id`, `pass`, `email`, `emailpublic`, `emailchecked`,
-	`firstname`, `lastname`, `username`, `avatar`
-	FROM `users` WHERE
-	`email` = '$email' OR
-	`username` = '$email'" );
-
-if ( $res ) {
-	$cmps = null;
-	$user = $res->num_rows > 0
-		? $res->fetch_object()
-		: null;
-	$res->free();
-	$authOk = false;
-	if ( $user ) {
-		$authOk = password_verify( $POSTpass, $user->pass );
-		unset( $user->pass );
-	}
-	if ( $authOk ) {
-		$cmps = getCompositions( $mysqli, $user->id, false );
-	}
-	$mysqli->close();
-	if ( !$authOk ) {
-		sendJSON( 401, 'login:fail' );
-	} else if ( !$res || $cmps === null ) {
-		sendJSON( 500, $mysqli->error );
-	} else {
-		$_SESSION[ 'me' ] = ( object )[
-			'user' => $user,
-			'compositions' => $cmps,
-		];
-		sendJSON( 200, $_SESSION[ 'me' ] );
-	}
-} else {
+$user = getUser( $mysqli, 'usernameEmail', $POSTemail, true );
+$authOk = false;
+if ( $user === null ) {
 	sendJSON( 500, $mysqli->error );
 }
+if ( $user !== false ) {
+	$authOk = password_verify( $POSTpass, $user->pass );
+	unset( $user->pass );
+}
+if ( $authOk === false ) {
+	sendJSON( 401, 'login:fail' );
+}
+
+$cmps = getCompositions( $mysqli, $user->id, false );
+if ( $cmps === null ) {
+	sendJSON( 500, $mysqli->error );
+}
+
+$mysqli->close();
+$_SESSION[ 'me' ] = ( object )[
+	'user' => $user,
+	'compositions' => $cmps,
+];
+sendJSON( 200, $_SESSION[ 'me' ] );
