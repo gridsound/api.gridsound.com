@@ -1,9 +1,10 @@
 <?php
 
 function getUserCompositions( &$mysqli, $iduser, $onlyPublic ) {
+	$cmps = null;
+	$iduser = $mysqli->real_escape_string( $iduser );
 	$query = "SELECT `id`, `public`, `data`
-		FROM `compositions`
-		WHERE `iduser` = '$iduser'";
+		FROM `compositions` WHERE `iduser` = '$iduser'";
 	if ( $onlyPublic ) {
 		$query .= ' AND `public` = 1';
 	}
@@ -11,11 +12,12 @@ function getUserCompositions( &$mysqli, $iduser, $onlyPublic ) {
 	if ( $res ) {
 		$cmps = array();
 		while ( $row = $res->fetch_object() ) {
-			$row->data = base64_decode( $row->data, true );
+			if ( $onlyPublic ) {
+				unset( $row->public );
+			}
 			$cmps[] = $row;
 		}
 		$res->free();
-		return $cmps;
 	}
-	return null;
+	return $cmps;
 }
