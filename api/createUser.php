@@ -54,15 +54,12 @@ if ( $res ) {
 		sendEmailConfirmation( $id, $username, $email, $code );
 	}
 	$_SESSION[ 'me' ] = ( object )[
-		'user' => ( object )[
-			'id' => $id,
-			'email' => $email,
-			'emailpublic' => '0',
-			'emailchecked' => '0',
-			'username' => $username,
-			'avatar' => $avatar,
-		],
-		'compositions' => array(),
+		'id' => $id,
+		'email' => $email,
+		'emailpublic' => '0',
+		'emailchecked' => '0',
+		'username' => $username,
+		'avatar' => $avatar,
 	];
 	sendJSON( 201, $_SESSION[ 'me' ] );
 } else {
