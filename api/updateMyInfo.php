@@ -8,7 +8,7 @@ require_once( 'common/enableCors.php' );
 enableCors();
 session_start();
 
-$me = $_SESSION[ 'me' ]->user ?? null;
+$me = $_SESSION[ 'me' ] ?? null;
 if ( !$me ) {
 	sendJSON( 401, 'user:not-connected' );
 }
@@ -59,7 +59,7 @@ if ( $res ) {
 		$me->email = $email;
 		$me->emailchecked = '0';
 	}
-	sendJSON( 200, ( object )[ 'user' => $me ] );
+	sendJSON( 200, $me );
 } else {
 	sendJSON( 500, $mysqli->error );
 }
