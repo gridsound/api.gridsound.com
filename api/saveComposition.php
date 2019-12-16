@@ -17,7 +17,7 @@ if ( !$me ) {
 	sendJSON( 401, 'user:not-connected' );
 } else if ( $me->emailchecked !== '1' ) {
 	sendJSON( 403, 'email:not-verified' );
-} else if ( !$POSTcmp || !$data ) {
+} else if ( !$POSTcmp || !$dataDecoded ) {
 	sendJSON( 400, 'query:bad-format' );
 }
 
