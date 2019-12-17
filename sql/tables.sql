@@ -5,7 +5,7 @@ CREATE TABLE `compositions` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `iduser` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '1',
-  `data` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` json NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
