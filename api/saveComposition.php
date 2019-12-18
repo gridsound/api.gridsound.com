@@ -26,16 +26,25 @@ require_once( 'common/connection.php' );
 $id = $mysqli->real_escape_string( $dataDecoded->id );
 $data = $mysqli->real_escape_string( $POSTcmp );
 $iduser = $mysqli->real_escape_string( $me->id );
+$name = $mysqli->real_escape_string( $dataDecoded->name );
+$bpm = $mysqli->real_escape_string( $dataDecoded->bpm );
+$duration = $mysqli->real_escape_string( $dataDecoded->duration );
+$beatsPerMeasure = $mysqli->real_escape_string( $dataDecoded->beatsPerMeasure );
+$stepsPerBeat = $mysqli->real_escape_string( $dataDecoded->stepsPerBeat );
 $res = $mysqli->query( "UPDATE `compositions` SET
+	`name` = '$name',
+	`bpm` = '$bpm',
+	`duration` = '$duration',
+	`beatsPerMeasure` = '$beatsPerMeasure',
+	`stepsPerBeat` = '$stepsPerBeat',
 	`data` = '$data',
 	`updated` = NOW()
-	WHERE `id` = '$id'
-	AND `iduser` = '$iduser'" );
+	WHERE `id` = '$id' AND `iduser` = '$iduser'" );
 
 if ( $res && $mysqli->affected_rows === 0 ) {
 	$res = $mysqli->query( "INSERT INTO `compositions` (
-		`id`,  `iduser`,  `data`, `created`, `updated` ) VALUES (
-		'$id', '$iduser', '$data', NOW(),     NOW() )" );
+		`id`,  `iduser`,  `name`,  `bpm`,  `duration`,  `beatsPerMeasure`,  `stepsPerBeat`,  `data`, `created`, `updated` ) VALUES (
+		'$id', '$iduser', '$name', '$bpm', '$duration', '$beatsPerMeasure', '$stepsPerBeat', '$data', NOW(),     NOW() )" );
 }
 
 if ( $res ) {
