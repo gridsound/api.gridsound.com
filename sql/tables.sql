@@ -5,6 +5,11 @@ CREATE TABLE `compositions` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `iduser` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `duration` smallint(6) NOT NULL,
+  `bpm` smallint(6) NOT NULL,
+  `beatsPerMeasure` tinyint(4) NOT NULL,
+  `stepsPerBeat` tinyint(4) NOT NULL,
   `data` json NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
