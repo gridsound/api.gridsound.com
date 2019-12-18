@@ -14,7 +14,7 @@ $me = $_SESSION[ 'me' ] ?? null;
 
 if ( !$me ) {
 	sendJSON( 401, 'user:not-connected' );
-} else if ( $me->user->emailchecked !== '1' ) {
+} else if ( $me->emailchecked !== '1' ) {
 	sendJSON( 403, 'email:not-verified' );
 } else if ( !$POSTid ) {
 	sendJSON( 400, 'query:bad-format' );
@@ -23,21 +23,13 @@ if ( !$me ) {
 require_once( 'common/connection.php' );
 
 $id = $mysqli->real_escape_string( $POSTid );
-$iduser = $mysqli->real_escape_string( $me->user->id );
-$res = $mysqli->query( "DELETE FROM `compositions`
-	WHERE `id` = '$id'
-	AND `iduser` = '$iduser'" );
+$iduser = $mysqli->real_escape_string( $me->id );
+$res = $mysqli->query( "DELETE FROM `compositions` WHERE `id` = '$id' AND `iduser` = '$iduser'" );
 
-if ( $res ) {
-	$deleted = $mysqli->affected_rows > 0;
-	$mysqli->close();
-	if ( $deleted ) {
-		$ind = array_search( $id, array_column( $me->compositions, 'id' ), true );
-		array_splice( $me->compositions, $ind, 1 );
-		sendJSON( 200 );
-	} else {
-		sendJSON( 404 );
-	}
-} else {
-	sendJSON( 500, $mysqli->error );
+$err = $mysqli->error;
+$deleted = $mysqli->affected_rows > 0;
+$mysqli->close();
+if ( !$res ) {
+	sendJSON( 500, $err );
 }
+sendJSON( $deleted ? 200 : 404 );
