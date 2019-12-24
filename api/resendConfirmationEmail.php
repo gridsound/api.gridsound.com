@@ -18,9 +18,8 @@ else if ( $POSTemail !== $me->email ) { sendJSON( 400, "email-not-match" ); }
 else if ( $me->emailchecked === '1' ) { sendJSON( 400, "email-verified" ); }
 
 require_once( 'common/connection.php' );
-require_once( 'common/sendEmail.php' );
-require_once( 'common/sendEmailConfirmation.php' );
 require_once( 'common/addThingToVerify.php' );
+require_once( 'common/sendEmailConfirmation.php' );
 
 $code = addThingToVerify( $mysqli, $me->id, $me->email );
 if ( $code ) {

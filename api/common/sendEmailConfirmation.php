@@ -1,5 +1,7 @@
 <?php
 
+require_once( 'sendEmail.php' );
+
 function sendEmailConfirmation( $id, $username, $email, $code ) {
 	return sendEmail( $email, 'Email confirmation',
 		"Hi $username,\r\n\r\n" .

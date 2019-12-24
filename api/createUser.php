@@ -35,7 +35,6 @@ if ( $errMsg ) {
 
 require_once( 'common/connection.php' );
 require_once( 'common/addThingToVerify.php' );
-require_once( 'common/sendEmail.php' );
 require_once( 'common/sendEmailConfirmation.php' );
 require_once( 'common/uuid.php' );
 
