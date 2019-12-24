@@ -3,14 +3,15 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
 
 enableCors();
 
-$_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTcode = $_POST[ 'code' ] ?? null;
-$POSTpass = $_POST[ 'pass' ] ?? '';
-$POSTemail = $_POST[ 'email' ] ?? null;
+$POST = parsePOST();
+$POSTcode = $POST->code ?? null;
+$POSTpass = $POST->pass ?? '';
+$POSTemail = $POST->email ?? null;
 
 if ( !$POSTcode ) {
 	sendJSON( 400, 'query:bad-format' );

@@ -3,12 +3,13 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
 
 enableCors();
 
-$_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTemail = $_POST[ 'email' ] ?? null;
+$POST = parsePOST();
+$POSTemail = $POST->email ?? null;
 if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
 	sendJSON( 400, 'email:bad-format' );
 }

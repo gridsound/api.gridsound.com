@@ -3,6 +3,7 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
 
 enableCors();
@@ -13,11 +14,11 @@ if ( !$me ) {
 	sendJSON( 401, 'user:not-connected' );
 }
 
-$_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTemail = strtolower( trim( $_POST[ 'email' ] ?? $me->email ) );
-$POSTlastname = trim( $_POST[ 'lastname' ] ?? $me->lastname );
-$POSTfirstname = trim( $_POST[ 'firstname' ] ?? $me->firstname );
-$POSTemailpublic = $_POST[ 'emailpublic' ] ?? null;
+$POST = parsePOST();
+$POSTemail = strtolower( trim( $POST->email ?? $me->email ) );
+$POSTlastname = trim( $POST->lastname ?? $me->lastname );
+$POSTfirstname = trim( $POST->firstname ?? $me->firstname );
+$POSTemailpublic = $POST->emailpublic ?? null;
 
 if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
 	sendJSON( 400, 'email:bad-format' );

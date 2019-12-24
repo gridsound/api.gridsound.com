@@ -3,6 +3,7 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
 
 enableCors();
@@ -12,10 +13,10 @@ if ( isset( $_SESSION[ 'me' ] ) ) {
 	sendJSON( 200, $_SESSION[ 'me' ] );
 }
 
-$_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTpass = $_POST[ 'pass' ] ?? '';
-$POSTemail = strtolower( trim( $_POST[ 'email' ] ?? '' ) );
-$POSTusername = trim( $_POST[ 'username' ] ?? '' );
+$POST = parsePOST();
+$POSTpass = $POST->pass ?? '';
+$POSTemail = strtolower( trim( $POST->email ?? '' ) );
+$POSTusername = trim( $POST->username ?? '' );
 
 $errMsg = null;
 $POSTpassLen = mb_strlen( $POSTpass );

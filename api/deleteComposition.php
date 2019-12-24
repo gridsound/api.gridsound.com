@@ -3,13 +3,14 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
 
 enableCors();
 session_start();
 
-$_POST = json_decode( file_get_contents( 'php://input' ), true );
-$POSTid = $_POST[ 'id' ] ?? null;
+$POST = parsePOST();
+$POSTid = $POST->id ?? null;
 $me = $_SESSION[ 'me' ] ?? null;
 
 if ( !$me ) {
