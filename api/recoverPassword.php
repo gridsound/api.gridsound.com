@@ -17,8 +17,11 @@ require_once( 'common/connection.php' );
 
 $email = $mysqli->real_escape_string( $POSTemail );
 $res = $mysqli->query( "SELECT `username` FROM `users` WHERE `email` = '$email'" );
+$err = $mysqli->error;
+
 if ( !$res ) {
-	sendJSON( 500, $mysqli->error );
+	$mysqli->close();
+	sendJSON( 500, $err );
 } else if ( $res->num_rows < 1 ) {
 	$res->free();
 	$mysqli->close();
@@ -31,17 +34,24 @@ $res->free();
 $res = $mysqli->query( "SELECT `id` FROM `passwordForgotten` WHERE
 	`email` = '$email' AND
 	`expire` > NOW() - INTERVAL 1 DAY" );
+$err = $mysqli->error;
+
 if ( !$res ) {
-	sendJSON( 500, $mysqli->error );
+	$mysqli->close();
+	sendJSON( 500, $err );
 } else if ( $res->num_rows > 0 ) {
 	$res->free();
 	$mysqli->close();
 	sendJSON( 409, 'password:already-recovering' );
+} else {
+	$res->free();
 }
 
 $res = $mysqli->query( "DELETE FROM `passwordForgotten` WHERE `email` = '$email'" );
+$err = $mysqli->error;
 if ( !$res ) {
-	sendJSON( 500, $mysqli->error );
+	$mysqli->close();
+	sendJSON( 500, $err );
 }
 
 require_once( 'common/uuid.php' );

@@ -47,9 +47,10 @@ if ( $res && $mysqli->affected_rows === 0 ) {
 		'$id', '$iduser', '$name', '$bpm', '$duration', '$beatsPerMeasure', '$stepsPerBeat', '$data', NOW(),     NOW() )" );
 }
 
+$err = $mysqli->error;
+$mysqli->close();
 if ( $res ) {
-	$mysqli->close();
 	sendJSON( 200 );
 } else {
-	sendJSON( 500, $mysqli->error );
+	sendJSON( 500, $err );
 }

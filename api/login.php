@@ -24,9 +24,11 @@ require_once( 'common/connection.php' );
 require_once( 'common/getUser.php' );
 
 $user = getUser( $mysqli, 'usernameEmail', $POSTemail, true );
+$err = $mysqli->error;
+$mysqli->close();
 $authOk = false;
 if ( $user === null ) {
-	sendJSON( 500, $mysqli->error );
+	sendJSON( 500, $err );
 }
 if ( $user !== false ) {
 	$authOk = password_verify( $POSTpass, $user->pass );
@@ -35,7 +37,5 @@ if ( $user !== false ) {
 if ( $authOk === false ) {
 	sendJSON( 401, 'login:fail' );
 }
-
-$mysqli->close();
 $_SESSION[ 'me' ] = $user;
 sendJSON( 200, $_SESSION[ 'me' ] );

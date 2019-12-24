@@ -46,14 +46,15 @@ $avatar = 'https://www.gravatar.com/avatar/' . md5( $email );
 $res = $mysqli->query( "INSERT INTO `users` (
 	`id`,  `email`,  `pass`,  `username`,  `avatar`, `created` ) VALUES (
 	'$id', '$email', '$pass', '$username', '$avatar', NOW() )" );
+$err = $mysqli->error;
+$code = $res ? addThingToVerify( $mysqli, $id, $email ) : null;
+$mysqli->close();
 
 if ( $res ) {
-	$code = addThingToVerify( $mysqli, $id, $email );
-	$mysqli->close();
 	if ( $code ) {
 		sendEmailConfirmation( $id, $username, $email, $code );
 	}
-	$_SESSION[ 'me' ] = ( object )[
+	$me = ( object )[
 		'id' => $id,
 		'email' => $email,
 		'emailpublic' => '0',
@@ -61,9 +62,9 @@ if ( $res ) {
 		'username' => $username,
 		'avatar' => $avatar,
 	];
-	sendJSON( 201, $_SESSION[ 'me' ] );
+	$_SESSION[ 'me' ] = $me;
+	sendJSON( 201, $me );
 } else {
-	$err = $mysqli->error;
 	if ( strpos( $err, 'Duplicate' ) === 0 ) {
 		$err = explode( '\'', $err )[ 3 ] . ':duplicate';
 	}

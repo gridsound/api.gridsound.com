@@ -49,9 +49,10 @@ $query .= "
 ";
 
 $res = $mysqli->query( $query );
+$err = $mysqli->error;
+$mysqli->close();
 
 if ( $res ) {
-	$mysqli->close();
 	$me->lastname = $lastname;
 	$me->firstname = $firstname;
 	$me->emailpublic = $emailpublic;
@@ -61,5 +62,5 @@ if ( $res ) {
 	}
 	sendJSON( 200, $me );
 } else {
-	sendJSON( 500, $mysqli->error );
+	sendJSON( 500, $err );
 }
