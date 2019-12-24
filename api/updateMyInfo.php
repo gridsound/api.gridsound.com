@@ -5,6 +5,7 @@ error_reporting( -1 );
 require_once( 'common/sendJSON.php' );
 require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
+require_once( 'common/connectOrDie.php' );
 
 enableCors();
 session_start();
@@ -24,8 +25,7 @@ if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
 	sendJSON( 400, 'email:bad-format' );
 }
 
-require_once( 'common/connection.php' );
-
+$mysqli = connectOrDie();
 $id = $me->id;
 $email = $mysqli->real_escape_string( $POSTemail );
 $lastname = $mysqli->real_escape_string( $POSTlastname );

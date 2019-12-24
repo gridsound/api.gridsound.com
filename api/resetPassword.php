@@ -3,8 +3,10 @@
 error_reporting( -1 );
 
 require_once( 'common/sendJSON.php' );
+require_once( 'common/sendEmail.php' );
 require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
+require_once( 'common/connectOrDie.php' );
 
 enableCors();
 
@@ -21,15 +23,13 @@ if ( !$POSTcode ) {
 	sendJSON( 400, 'pass:too-short' );
 }
 
-require_once( 'common/connection.php' );
-require_once( 'common/sendEmail.php' );
-
+$mysqli = connectOrDie();
 $code = $mysqli->real_escape_string( $POSTcode );
 $email = $mysqli->real_escape_string( $POSTemail );
-
 $res = $mysqli->query( "DELETE FROM `passwordForgotten` WHERE
 	`email` = '$email' AND
 	`code` = '$code'" );
+
 if ( !$res ) {
 	sendJSON( 500, $mysqli->error );
 } if ( $mysqli->affected_rows < 1 ) {

@@ -2,8 +2,10 @@
 
 error_reporting( -1 );
 
+require_once( 'common/getUser.php' );
 require_once( 'common/sendJSON.php' );
 require_once( 'common/enableCors.php' );
+require_once( 'common/connectOrDie.php' );
 
 enableCors();
 
@@ -12,12 +14,11 @@ if ( !$GETusername ) {
 	sendJSON( 400, 'query:bad-format' );
 }
 
-require_once( 'common/connection.php' );
-require_once( 'common/getUser.php' );
-
+$mysqli = connectOrDie();
 $user = getUser( $mysqli, 'username', $GETusername );
 $err = $mysqli->error;
 $mysqli->close();
+
 if ( $user === null ) {
 	sendJSON( 500, $err );
 }

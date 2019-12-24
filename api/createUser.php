@@ -2,9 +2,13 @@
 
 error_reporting( -1 );
 
+require_once( 'common/uuid.php' );
 require_once( 'common/sendJSON.php' );
 require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
+require_once( 'common/connectOrDie.php' );
+require_once( 'common/addThingToVerify.php' );
+require_once( 'common/sendEmailConfirmation.php' );
 
 enableCors();
 
@@ -33,11 +37,7 @@ if ( $errMsg ) {
 	sendJSON( 400, $errMsg );
 }
 
-require_once( 'common/connection.php' );
-require_once( 'common/addThingToVerify.php' );
-require_once( 'common/sendEmailConfirmation.php' );
-require_once( 'common/uuid.php' );
-
+$mysqli = connectOrDie();
 $id = uuid();
 $pass = password_hash( $POSTpass, PASSWORD_BCRYPT );
 $email = $mysqli->real_escape_string( $POSTemail );

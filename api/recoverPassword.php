@@ -2,9 +2,12 @@
 
 error_reporting( -1 );
 
+require_once( 'common/uuid.php' );
 require_once( 'common/sendJSON.php' );
+require_once( 'common/sendEmail.php' );
 require_once( 'common/parsePOST.php' );
 require_once( 'common/enableCors.php' );
+require_once( 'common/connectOrDie.php' );
 
 enableCors();
 
@@ -14,8 +17,7 @@ if ( !filter_var( $POSTemail, FILTER_VALIDATE_EMAIL ) ) {
 	sendJSON( 400, 'email:bad-format' );
 }
 
-require_once( 'common/connection.php' );
-
+$mysqli = connectOrDie();
 $email = $mysqli->real_escape_string( $POSTemail );
 $res = $mysqli->query( "SELECT `username` FROM `users` WHERE `email` = '$email'" );
 $err = $mysqli->error;
@@ -54,9 +56,6 @@ if ( !$res ) {
 	$mysqli->close();
 	sendJSON( 500, $err );
 }
-
-require_once( 'common/uuid.php' );
-require_once( 'common/sendEmail.php' );
 
 $code = uuid();
 $res = $mysqli->query( "INSERT INTO `passwordForgotten`(

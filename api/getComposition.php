@@ -2,8 +2,11 @@
 
 error_reporting( -1 );
 
+require_once( 'common/getUser.php' );
 require_once( 'common/sendJSON.php' );
 require_once( 'common/enableCors.php' );
+require_once( 'common/connectOrDie.php' );
+require_once( 'common/getComposition.php' );
 
 enableCors();
 
@@ -12,10 +15,7 @@ if ( !$cmpId ) {
 	sendJSON( 400, 'query:bad-format' );
 }
 
-require_once( 'common/connection.php' );
-require_once( 'common/getUser.php' );
-require_once( 'common/getComposition.php' );
-
+$mysqli = connectOrDie();
 $cmp = getComposition( $mysqli, $cmpId );
 if ( $cmp === null ) {
 	sendJSON( 500, $mysqli->error );
